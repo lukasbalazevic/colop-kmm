@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 
 class CoinsViewModel : ViewModel(), CoroutineScopeOwner {
     private val getCoinsListUseCase = GetCoinsListUseCase()
-    var coins by mutableStateOf(emptyList<Coin>())
     var message by mutableStateOf("")
 
     override val coroutineScope: CoroutineScope
@@ -20,7 +19,8 @@ class CoinsViewModel : ViewModel(), CoroutineScopeOwner {
 
     fun fetchCoins() {
         getCoinsListUseCase.execute(Unit) {
-           onSuccess { message = it }
+            onSuccess { message = it }
+            onError { message = "Fuck you" }
         }
     }
 }
