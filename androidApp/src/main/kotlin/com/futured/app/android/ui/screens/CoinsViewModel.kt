@@ -19,7 +19,7 @@ class CoinsViewModel : ViewModel(), CoroutineScopeOwner {
     var message by mutableStateOf("")
 
     val color = mutableStateOf(Color.Red)
-    val size = mutableStateOf(120.sp)
+    val size = mutableStateOf(100.sp)
 
     override val coroutineScope: CoroutineScope
         get() = viewModelScope
@@ -31,22 +31,22 @@ class CoinsViewModel : ViewModel(), CoroutineScopeOwner {
     fun changeColor() = coroutineScope.launch {
         while (true) {
             color.value = Color.Red
-            size.value = 120.sp
+            size.value = 100.sp
             delay(100)
             color.value = Color.Black
-            size.value = 125.sp
+            size.value = 105.sp
             delay(100)
             color.value = Color.Blue
-            size.value = 130.sp
+            size.value = 110.sp
             delay(100)
             color.value = Color.Cyan
-            size.value = 125.sp
+            size.value = 115.sp
             delay(100)
             color.value = Color.DarkGray
-            size.value = 123.sp
+            size.value = 110.sp
             delay(100)
             color.value = Color.Magenta
-            size.value = 115.sp
+            size.value = 105.sp
             delay(100)
         }
     }
