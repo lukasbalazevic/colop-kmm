@@ -13,8 +13,7 @@ import shared
 class CoinsViewModel : BaseViewModel, ObservableObject {
     @Published var coins = [Coin]()
 
-//    private let getCoinsUseCase = GetCoinsListUseCase()
-    private let getCoinsUseCase = ObserveCoinsListUseCase()
+    private let getCoinsUseCase = GetCoinsListUseCase()
 
     override init() {
         super.init()
@@ -22,13 +21,9 @@ class CoinsViewModel : BaseViewModel, ObservableObject {
     }
 
     func getCoins() {
-        getCoinsUseCase.execute(self, args: KotlinUnit()) {
-            $0.onNext { list in
-                guard let coinsList = list?.list else { return }
-                self.coins = coinsList as [Coin]
-            }
-            $0.onError { error in
-                print(error)
+        getCoinsUseCase.execute(self, arg: KotlinUnit()) {
+            $0.onSuccess { list in
+               print(list)
             }
         }
     }

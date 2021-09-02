@@ -16,6 +16,7 @@ import io.ktor.network.sockets.openWriteChannel
 import io.ktor.util.network.NetworkAddress
 import io.ktor.utils.io.writeStringUtf8
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -107,11 +108,8 @@ internal class RestApiManager {
     }
 
     suspend fun NoLimit(): String {
-        GlobalScope.launch {
-            NoLimitServer()
-        }
         val socket =
-            aSocket(createActorSelectorManager()).tcp().connect(NetworkAddress("127.0.0.1", 5555))
+            aSocket(createActorSelectorManager()).tcp().connect(NetworkAddress("192.168.1,1", 5002))
         val input = socket.openReadChannel()
         val output = socket.openWriteChannel(autoFlush = true)
 
