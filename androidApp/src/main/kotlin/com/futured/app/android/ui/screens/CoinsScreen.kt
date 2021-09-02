@@ -5,6 +5,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,17 +14,28 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getSystemService
 import kotlin.math.sqrt
 
 
 @Composable
 fun CoinsScreen(viewModel: CoinsViewModel = CoinsViewModel()) {
-    initSensor(viewModel)
+
+
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        initSensor(viewModel)
+        Text(text = "SHAKE", color = viewModel.color.value, fontSize = viewModel.size.value)
+    }
+
 }
 
 @Composable
@@ -39,11 +51,13 @@ fun initSensor(viewModel: CoinsViewModel) {
         }
     })
 
-    mSensorManager.registerListener(
-        mShakeDetector,
-        mAccelerometer,
-        SensorManager.SENSOR_DELAY_UI
-    )
+    remember {
+        mSensorManager.registerListener(
+            mShakeDetector,
+            mAccelerometer,
+            SensorManager.SENSOR_DELAY_UI
+        )
+    }
 }
 
 class ShakeDetector : SensorEventListener {
