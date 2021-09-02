@@ -36,7 +36,6 @@ fun initSensor(viewModel: CoinsViewModel) {
     mShakeDetector.setOnShakeListener(object : ShakeDetector.OnShakeListener {
         override fun onShake(count: Int) {
             viewModel.fetchCoins()
-            Toast.makeText(ctx, "ASDA", Toast.LENGTH_SHORT).show()
         }
     })
 
