@@ -24,24 +24,6 @@ import kotlin.math.sqrt
 @Composable
 fun CoinsScreen(viewModel: CoinsViewModel = CoinsViewModel()) {
     initSensor(viewModel)
-
-    Column(Modifier.fillMaxSize()) {
-        Button(
-            modifier = Modifier
-                .align(CenterHorizontally)
-                .padding(16.dp),
-            onClick = { viewModel.fetchCoins() }
-        ) {
-            Text(text = "Load data")
-        }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            content = {
-                item {
-                    Text(text = viewModel.message)
-                }
-            })
-    }
 }
 
 @Composable
