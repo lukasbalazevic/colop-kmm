@@ -8,11 +8,9 @@ import androidx.lifecycle.viewModelScope
 import app.futured.arkitekt.kmusecases.scope.CoroutineScopeOwner
 import com.futured.app.Coin
 import com.futured.app.domain.GetCoinsListUseCase
-import com.futured.app.domain.ObserveCoinsListUseCase
 import kotlinx.coroutines.CoroutineScope
 
 class CoinsViewModel : ViewModel(), CoroutineScopeOwner {
-    private val getCoinsUseCase = ObserveCoinsListUseCase()
     private val getCoinsListUseCase = GetCoinsListUseCase()
     var coins by mutableStateOf(emptyList<Coin>())
     var message by mutableStateOf("")

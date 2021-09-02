@@ -17,7 +17,6 @@ class CoinsViewModel : BaseViewModel, ObservableObject {
 
     override init() {
         super.init()
-        self.getCoins()
     }
 
     func getCoins() {

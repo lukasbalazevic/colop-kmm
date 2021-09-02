@@ -1,22 +1,14 @@
 package com.futured.app.data.api
 
 import com.futured.app.createActorSelectorManager
-import com.futured.app.data.Endpoint
-import io.ktor.client.HttpClient
-import io.ktor.client.request.header
-import io.ktor.client.request.request
-import io.ktor.client.request.url
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.readText
-import io.ktor.http.HttpMethod
-import io.ktor.http.Url
-import io.ktor.network.sockets.aSocket
-import io.ktor.network.sockets.openReadChannel
-import io.ktor.network.sockets.openWriteChannel
-import io.ktor.util.network.NetworkAddress
-import io.ktor.utils.io.writeStringUtf8
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.network.sockets.*
+import io.ktor.util.network.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -28,13 +20,6 @@ internal class RestApiManager {
         isLenient = true
         ignoreUnknownKeys = true
     }
-
-    suspend fun <R : Any> executeRequest(ep: Endpoint<R>) =
-        execute(
-            url = Url(ep.url),
-            method = ep.method,
-            responseSerializer = ep.responseSerializer
-        )
 
     private suspend fun <R : Any> execute(
         url: Url,
@@ -109,12 +94,12 @@ internal class RestApiManager {
 
     suspend fun NoLimit(): String {
         val socket =
-            aSocket(createActorSelectorManager()).tcp().connect(NetworkAddress("192.168.1,1", 5002))
+            aSocket(createActorSelectorManager()).tcp().connect(NetworkAddress("192.168.1.1", 5002))
         val input = socket.openReadChannel()
         val output = socket.openWriteChannel(autoFlush = true)
 
-        output.writeStringUtf8("hello\r\n")
-        return input.readUTF8Line(Int.MAX_VALUE) ?: ""
+        output.writeFully(arrayOf(8, 0, 0, 0, 43, 0, 1, 0).map { it.toByte() }.toTypedArray().toByteArray())
+        return input.readByte().toString()
 
     }
 }
