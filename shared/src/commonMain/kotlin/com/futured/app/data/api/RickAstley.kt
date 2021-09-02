@@ -1,5 +1,8 @@
 package com.futured.app.data.api
 
+import kotlin.native.concurrent.SharedImmutable
+
+@SharedImmutable
 val RickAstley = arrayOf(
     56,
     0,
