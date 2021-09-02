@@ -7,19 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.futured.arkitekt.kmusecases.scope.CoroutineScopeOwner
 import com.futured.app.Coin
+import com.futured.app.domain.GetCoinsListUseCase
 import com.futured.app.domain.ObserveCoinsListUseCase
 import kotlinx.coroutines.CoroutineScope
 
 class CoinsViewModel : ViewModel(), CoroutineScopeOwner {
     private val getCoinsUseCase = ObserveCoinsListUseCase()
+    private val getCoinsListUseCase = GetCoinsListUseCase()
     var coins by mutableStateOf(emptyList<Coin>())
+    var message by mutableStateOf("")
 
     override val coroutineScope: CoroutineScope
         get() = viewModelScope
 
     fun fetchCoins() {
-        getCoinsUseCase.execute(Unit) {
-            onNext { coins = it.list }
+        getCoinsListUseCase.execute(Unit) {
+           onSuccess { message = it }
         }
     }
 }

@@ -27,13 +27,8 @@ fun CoinsScreen(viewModel: CoinsViewModel = CoinsViewModel()) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             content = {
-                items(items = viewModel.coins) { item ->
-                    Text(
-                        modifier = Modifier
-                            .align(CenterHorizontally)
-                            .padding(4.dp),
-                        text = item.name
-                    )
+                item {
+                    Text(text = viewModel.message)
                 }
             })
     }

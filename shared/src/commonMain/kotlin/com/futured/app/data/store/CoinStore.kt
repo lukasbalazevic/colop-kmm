@@ -14,11 +14,14 @@ internal class CoinStore internal constructor(
 ) {
     suspend fun fetchCoins(): CoinsResponse = api.executeRequest(Endpoint.GetCoins())
 
-    suspend fun storeCoins(coins: List<CoinResponse>) = db.insertAll(coins.map {
-        Coin(
-            it.id, it.name, it.icon, it.symbol, it.price
-        )
-    })
+    suspend fun storeCoins(coins: List<CoinResponse>) {
+
+        return db.insertAll(coins.map {
+            Coin(
+                it.id, it.name, it.icon, it.symbol, it.price
+            )
+        })
+    }
 
     fun observeCoins(): Flow<List<Coin>> = db.getAll()
 }

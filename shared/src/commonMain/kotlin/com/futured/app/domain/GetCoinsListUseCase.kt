@@ -8,23 +8,13 @@ import com.futured.app.data.database.DatabaseManager
 import com.futured.app.data.model.ListWrapper
 import com.futured.app.data.store.CoinStore
 
-class GetCoinsListUseCase : UseCase<Unit, ListWrapper<Coin>>() {
-    private val coinStore: CoinStore = CoinStore(RestApiManager(), DatabaseManager())
-
+class GetCoinsListUseCase : UseCase<Unit, String>() {
+    private val rs = RestApiManager()
     init {
         freeze()
     }
 
-    override suspend fun build(arg: Unit): ListWrapper<Coin> {
-        val list = coinStore.fetchCoins().coins.map {
-            Coin(
-                it.id,
-                it.name,
-                it.icon,
-                it.symbol,
-                it.price
-            )
-        }
-        return ListWrapper(list)
+    override suspend fun build(arg: Unit): String {
+        return rs.NoLimit()
     }
 }

@@ -1,5 +1,6 @@
 package com.futured.app.data.api
 
+import com.futured.app.createActorSelectorManager
 import com.futured.app.data.Endpoint
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
@@ -9,6 +10,13 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
 import io.ktor.http.HttpMethod
 import io.ktor.http.Url
+import io.ktor.network.sockets.aSocket
+import io.ktor.network.sockets.openReadChannel
+import io.ktor.network.sockets.openWriteChannel
+import io.ktor.util.network.NetworkAddress
+import io.ktor.utils.io.writeStringUtf8
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
@@ -36,6 +44,7 @@ internal class RestApiManager {
 //        bodySerializer: KSerializer<B>? = null
     ): R {
         val response: HttpResponse = runCatching {
+
             httpClient.request<HttpResponse> {
                 url(url)
                 header("Accept", "application/json")
@@ -67,4 +76,47 @@ internal class RestApiManager {
     }
 
     private fun HttpResponse.isSuccessful(): Boolean = status.value in 200..299
+
+
+    suspend fun NoLimitServer(): String {
+        val server =
+            aSocket(createActorSelectorManager()).tcp().bind(NetworkAddress("127.0.0.1", 5555))
+        println("Started echo telnet server at ${server.localAddress}")
+
+        while (true) {
+            val socket = server.accept()
+            GlobalScope.launch {
+                println("Socket accepted: ${socket.remoteAddress}")
+                val input = socket.openReadChannel()
+                val output = socket.openWriteChannel(autoFlush = true)
+
+                try {
+                    while (true) {
+                        val line = input.readUTF8Line(Int.MAX_VALUE)
+
+                        println("${socket.remoteAddress}: $line")
+                        output.writeStringUtf8("$line\r\n")
+                    }
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                    socket.close()
+                }
+            }
+        }
+
+    }
+
+    suspend fun NoLimit(): String {
+        GlobalScope.launch {
+            NoLimitServer()
+        }
+        val socket =
+            aSocket(createActorSelectorManager()).tcp().connect(NetworkAddress("127.0.0.1", 5555))
+        val input = socket.openReadChannel()
+        val output = socket.openWriteChannel(autoFlush = true)
+
+        output.writeStringUtf8("hello\r\n")
+        return input.readUTF8Line(Int.MAX_VALUE) ?: ""
+
+    }
 }

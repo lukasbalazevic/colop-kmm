@@ -53,6 +53,7 @@ kotlin {
                 implementation(libs.sqldelight.ext)
                 // Arkitekt
                 api("app.futured.arkitekt:km-usecases:0.1.1-SNAPSHOT")
+                implementation("io.ktor:ktor-network:1.6.1")
             }
         }
         val commonTest by getting {
