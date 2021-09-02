@@ -23,7 +23,7 @@ import kotlin.math.sqrt
 
 @Composable
 fun CoinsScreen(viewModel: CoinsViewModel = CoinsViewModel()) {
-    initSensor()
+    initSensor(viewModel)
 
     Column(Modifier.fillMaxSize()) {
         Button(
@@ -45,7 +45,7 @@ fun CoinsScreen(viewModel: CoinsViewModel = CoinsViewModel()) {
 }
 
 @Composable
-fun initSensor() {
+fun initSensor(viewModel: CoinsViewModel) {
 
     val ctx = LocalContext.current
     val mSensorManager = getSystemService(LocalContext.current, SensorManager::class.java)
@@ -53,6 +53,7 @@ fun initSensor() {
     val mShakeDetector = ShakeDetector()
     mShakeDetector.setOnShakeListener(object : ShakeDetector.OnShakeListener {
         override fun onShake(count: Int) {
+            viewModel.fetchCoins()
             Toast.makeText(ctx, "ASDA", Toast.LENGTH_SHORT).show()
         }
     })

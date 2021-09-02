@@ -20,7 +20,7 @@ class CoinsViewModel : ViewModel(), CoroutineScopeOwner {
     fun fetchCoins() {
         getCoinsListUseCase.execute(Unit) {
             onSuccess { message = it }
-            onError { message = "Fuck you" }
+            onError { message = it.message ?: it.toString() }
         }
     }
 }
